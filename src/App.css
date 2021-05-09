@@ -1,0 +1,8 @@
+main {
+	font-family: Arial;
+}
+
+input,
+label {
+	display: block;
+}
