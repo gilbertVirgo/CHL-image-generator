@@ -4,7 +4,7 @@ import './App.css';
 import canvasTxt from "canvas-txt";
 
 const scale = 2;
-const margin = 50 * scale;
+const margin = 75 * scale;
 const width = 1000 * scale;
 const height = 1000 * scale;
 const logoWidth = 130 * scale; const logoHeight = 55 * scale;
@@ -26,7 +26,7 @@ const drawFile = async (context, base64String) => new Promise((resolve) => {
 const drawLogo = async (context) => new Promise((resolve) => {
   const image = new Image();
   image.onload = () => {
-    context.drawImage(image, 10, height - 10 * scale - logoHeight, logoWidth, logoHeight)
+    context.drawImage(image, 10 * scale, 10 * scale, logoWidth, logoHeight)
 
     resolve();
   }
@@ -48,6 +48,7 @@ function App() {
       (async function() {
         const context = canvas.current.getContext("2d");
         context.clearRect(0, 0, width, height);
+        context.imageSmoothingEnabled = false;
 
         if(base64String) {
           await drawFile(context, base64String);
@@ -59,10 +60,11 @@ function App() {
         if(text) {
           canvasTxt.vAlign = "center";
           canvasTxt.font = "'Hoefler Text', Garamond, serif";
+          canvasTxt.lineHeight = ((fontSize) * scale) + 20;
           canvasTxt.fontSize = fontSize * scale;
           canvasTxt.align = "center";
           context.fillStyle = textColour;
-          canvasTxt.drawText(context, text, margin, margin, width - (margin * 2), height - (margin * 2));
+          canvasTxt.drawText(context, text.split("").join(String.fromCharCode(8202)), margin, margin, width - (margin * 2), height - (margin * 2));
         }
 
         await drawLogo(context);
